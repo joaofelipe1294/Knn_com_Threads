@@ -1,0 +1,7 @@
+build.xml
+dist/
+nbproject/private
+/build/
+150k/CCtest1
+150k/CCtrain
+150k/CCtest2
