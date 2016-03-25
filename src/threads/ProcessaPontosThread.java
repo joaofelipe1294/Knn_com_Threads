@@ -19,11 +19,17 @@ public class ProcessaPontosThread implements Runnable{
     private List<double[]> listaTrain;
     private List<double[]> listaTest;
     private int kMaisProximos;
+    private List<List<Ponto>> resultados;
     
     public ProcessaPontosThread(List<double[]> listaTrain, List<double[]> listaTest , int kMaisProximos) {
         this.listaTrain = listaTrain;
         this.listaTest = listaTest;
         this.kMaisProximos = kMaisProximos;
+        this.resultados = new ArrayList<>();
+    }
+
+    public List<List<Ponto>> getResultados() {
+        return resultados;
     }
     
     @Override
@@ -45,7 +51,8 @@ public class ProcessaPontosThread implements Runnable{
                     Collections.sort(pontosMaisProximos);
                 }
             }
-            System.out.println("Linha : " + contador + "          |         tempo gasto : " + (new Date().getTime() - tempoInicial) + " ms"  + pontosMaisProximos);
+            resultados.add(pontosMaisProximos);
+            //System.out.println("Linha : " + contador + "          |         tempo gasto : " + (new Date().getTime() - tempoInicial) + " ms"  + pontosMaisProximos);
         }
     }
     
