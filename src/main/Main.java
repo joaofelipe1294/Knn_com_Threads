@@ -12,6 +12,7 @@ import util.SeparadoraDeListas;
 import java.util.List;
 import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
+import util.MontadoraDeLista;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Main {
         int kMaisProximos = 5;
         LeArquivoThread runnableTrain = new LeArquivoThread("150k/CCtrain");
         Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoThread runnableTest = new LeArquivoThread("150k/test600");
+        LeArquivoThread runnableTest = new LeArquivoThread("150k/CCtest1");
         Thread threadTest = new Thread(runnableTest);
         System.out.println("Comecou a ler os arquivos");
         long tempo = new Date().getTime();
@@ -56,12 +57,8 @@ public class Main {
         threads.get(3).join();
         System.out.println("Concluido processamento ponto a ponto ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
-        List<List<Ponto>> pontosMaisProximos = new ArrayList<>();
-        for(ProcessaPontosThread run : runnables){
-           for(List<Ponto> ponto : run.getResultados()){
-                pontosMaisProximos.add(ponto);
-            }
-        }
+        List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
+        System.out.println("Lista montada : " + pontosMaisProximos.size());
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         System.out.println("Concluido !!!");
     }
