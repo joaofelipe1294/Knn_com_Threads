@@ -5,7 +5,7 @@
  */
 package beans;
 
-import helpers.CalculadoraHelper;
+import util.Calculadora;
 
 /**
  *
@@ -16,7 +16,7 @@ public class Ponto implements Comparable<Ponto>{
     private int label;
 
     public Ponto(String[] linhaTrain , String[] linhaTeste){
-        this.distancia = new CalculadoraHelper(linhaTrain, linhaTeste).calcDistancia();
+        this.distancia = new Calculadora(linhaTrain, linhaTeste).calcDistancia();
         this.label = Integer.parseInt(linhaTrain[linhaTrain.length - 1]);
     }
     

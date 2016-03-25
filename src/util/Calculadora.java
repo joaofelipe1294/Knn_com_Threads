@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package helpers;
+package util;
 
 /**
  *
  * @author joaolopes
  */
-public class CalculadoraHelper {
+public class Calculadora {
     private String[] linhaTrain;
     private String[] linhaTest;
 
-    public CalculadoraHelper(String[] linhaTrain, String[] linhaTest) {
+    public Calculadora(String[] linhaTrain, String[] linhaTest) {
         this.linhaTrain = linhaTrain;
         this.linhaTest = linhaTest;
     }
