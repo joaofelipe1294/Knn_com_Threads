@@ -5,13 +5,9 @@
  */
 package main;
 
-import beans.Ponto;
-import util.SeparadoraDeListas;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import util.SeparadoraDeListas;
 import java.util.List;
-import java.util.ListIterator;
 import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
 
@@ -21,21 +17,33 @@ import threads.ProcessaPontosThread;
  */
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        final int NUMERO_THREADS = 3;
+        final int NUMERO_THREADS = 4;
         int kMaisProximos = 5;
         LeArquivoThread runnableTrain = new LeArquivoThread("150k/CCtrain");
         Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoThread runnableTest = new LeArquivoThread("150k/CCtest1");
+        LeArquivoThread runnableTest = new LeArquivoThread("150k/test600");
         Thread threadTest = new Thread(runnableTest);
         threadTrain.start();
         threadTest.start();
         threadTrain.join();
         threadTest.join();        
-        List<String> listaTrain = runnableTrain.getLista();
-        List<String> listaTest = runnableTest.getLista();
-        List<List<String>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
-        for(List<String> lista : listas){
-            System.out.println(lista.size());
+        System.out.println("ARQUIVOS LIDOS !");
+        List<double[]> listaTrain = runnableTrain.getLista();
+        List<double[]> listaTest = runnableTest.getLista();
+        List<List<double[]>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
+        
+        //List<String> listaTrain = runnableTrain.getLista();
+        //List<String> listaTest = runnableTest.getLista();
+        //List<List<String>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
+        System.out.println("LISTA QUEBRADA | " + listas.size());
+        List<Thread> threads = new ArrayList<>();
+        for(int contador = 0 ; contador < NUMERO_THREADS ; contador++){
+            ProcessaPontosThread run = new ProcessaPontosThread(listaTrain, listas.get(contador), kMaisProximos);
+            Thread thread = new Thread(run);
+            thread.start();
+            //thread.join();
+            threads.add(thread);
         }
+        System.out.println("Concluido !!!");
     }
 }

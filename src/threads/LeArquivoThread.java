@@ -16,14 +16,21 @@ import java.util.Scanner;
  */
 public class LeArquivoThread implements Runnable{
     private String nomeArquivo;
-    private List<String> lista;
+    private List<double[]> lista;
+    //private List<String> lista;
+    
     
     public LeArquivoThread(String nomeArquivo) {
         this.nomeArquivo = nomeArquivo;
         this.lista = new ArrayList<>();
     }
 
-    public List<String> getLista() {
+    /*public List<String> getLista() {
+        return lista;
+    }*/
+    
+    
+    public List<double[]> getLista() {
         return lista;
     }
     
@@ -33,11 +40,32 @@ public class LeArquivoThread implements Runnable{
             Scanner scan = new Scanner(new FileReader(this.nomeArquivo));
             scan.nextLine();
             while(scan.hasNextLine()){
-                this.lista.add(scan.nextLine());
+                String linha = scan.nextLine();
+                String linhaQhebrada[] = linha.split(" ");
+                double[] linhaDouble = new double[133];
+                int contador = 0;
+                for(String s : linhaQhebrada){
+                    linhaDouble[contador] = Double.valueOf(s);
+                    contador++;
+                }
+                this.lista.add(linhaDouble);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+    
+    /*@Override
+    public synchronized void run() {
+        try {
+            Scanner scan = new Scanner(new FileReader(this.nomeArquivo));
+            scan.nextLine();
+            while(scan.hasNextLine()){
+                lista.add(scan.nextLine());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }*/
     
 }
