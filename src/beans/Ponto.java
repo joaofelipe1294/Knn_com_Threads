@@ -14,12 +14,6 @@ import util.Calculadora;
 public class Ponto implements Comparable<Ponto>{
     private double distancia;
     private int label;
-
-    /*public Ponto(String[] linhaTrain , String[] linhaTeste){
-        this.distancia = new Calculadora(linhaTrain, linhaTeste).calcDistancia();
-        this.label = Integer.parseInt(linhaTrain[linhaTrain.length - 1]);
-    }*/
-    
     
     public Ponto(double[] linhaTrain , double[] linhaTeste){
         this.distancia = new Calculadora(linhaTrain, linhaTeste).calcDistancia();

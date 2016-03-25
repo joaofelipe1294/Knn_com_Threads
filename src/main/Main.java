@@ -31,10 +31,6 @@ public class Main {
         List<double[]> listaTrain = runnableTrain.getLista();
         List<double[]> listaTest = runnableTest.getLista();
         List<List<double[]>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
-        
-        //List<String> listaTrain = runnableTrain.getLista();
-        //List<String> listaTest = runnableTest.getLista();
-        //List<List<String>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
         System.out.println("LISTA QUEBRADA | " + listas.size());
         List<Thread> threads = new ArrayList<>();
         for(int contador = 0 ; contador < NUMERO_THREADS ; contador++){
