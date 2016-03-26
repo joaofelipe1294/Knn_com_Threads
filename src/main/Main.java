@@ -6,6 +6,8 @@
 package main;
 
 import beans.Ponto;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import util.SeparadoraDeListas;
@@ -20,12 +22,12 @@ import util.MontadoraDeLista;
  * @author joaolopes
  */
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
         final int NUMERO_THREADS = 4;
         int kMaisProximos = 5;
         LeArquivoThread runnableTrain = new LeArquivoThread("150k/CCtrain");
         Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoThread runnableTest = new LeArquivoThread("150k/CCtest1");
+        LeArquivoThread runnableTest = new LeArquivoThread("150k/test600");
         Thread threadTest = new Thread(runnableTest);
         System.out.println("Comecou a ler os arquivos");
         long tempo = new Date().getTime();
@@ -61,6 +63,17 @@ public class Main {
         List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
+        PrintStream arquivo = new PrintStream("150k/respostas.txt");
+        arquivo.println("+---------------------+");
+        arquivo.println("|   KNN    |  TESTE   |");
+        arquivo.println("+---------------------+");
+        for(int contador = 0 ; contador < listaTest.size() ; contador++){
+            int knn = resultados.get(contador).getLabel();
+            double[] linhaTeste = listaTest.get(contador);
+            int teste = (int) linhaTeste[linhaTeste.length - 1];
+            arquivo.println("|     " + knn + "    |    " + teste + "     |");
+        }
+        arquivo.println("+---------------------+");
         System.out.println("Concluido !!!");
     }
 }
