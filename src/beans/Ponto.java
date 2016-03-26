@@ -14,6 +14,9 @@ import util.Calculadora;
 public class Ponto implements Comparable<Ponto>{
     private double distancia;
     private int label;
+
+    public Ponto() {
+    }
     
     public Ponto(double[] linhaTrain , double[] linhaTeste){
         this.distancia = new Calculadora(linhaTrain, linhaTeste).calcDistancia();
@@ -26,6 +29,10 @@ public class Ponto implements Comparable<Ponto>{
 
     public int getLabel() {
         return label;
+    }
+
+    public void setLabel(int label) {
+        this.label = label;
     }
 
     @Override

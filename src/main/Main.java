@@ -12,6 +12,7 @@ import util.SeparadoraDeListas;
 import java.util.List;
 import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
+import util.ComparadoraDePontos;
 import util.MontadoraDeLista;
 
 /**
@@ -24,7 +25,7 @@ public class Main {
         int kMaisProximos = 5;
         LeArquivoThread runnableTrain = new LeArquivoThread("150k/CCtrain");
         Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoThread runnableTest = new LeArquivoThread("150k/test600");
+        LeArquivoThread runnableTest = new LeArquivoThread("150k/CCtest1");
         Thread threadTest = new Thread(runnableTest);
         System.out.println("Comecou a ler os arquivos");
         long tempo = new Date().getTime();
@@ -59,40 +60,7 @@ public class Main {
         tempo = new Date().getTime();
         List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
-        //List<Ponto> pontos = pontosMaisProximos.get(0);
-        
-        
-        
-        
-        
-        
-        for(List<Ponto> pontos : pontosMaisProximos){
-            int maiorAparicao = 0;
-            int labelMaiorAparicao = 0;
-            for(int indexInicial = 0 ; indexInicial < pontos.size() ; indexInicial++){
-                Ponto pontoAtual = pontos.get(indexInicial);
-                int contagem = 1;
-                for(int contador = indexInicial ; contador < pontos.size() ; contador++){
-                    if(pontoAtual.getLabel() == pontos.get(contador).getLabel()){
-                        contagem++;
-                    }
-                }
-                if(contagem > maiorAparicao){
-                    maiorAparicao = contagem;
-                    labelMaiorAparicao = pontoAtual.getLabel();
-                }
-            }
-            //System.out.println("pontos : " + pontos);
-            System.out.println("Label : " + labelMaiorAparicao);
-        }
-        
-        
-        
-        
-        
-        
-        
-        
+        List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         System.out.println("Concluido !!!");
     }
 }
