@@ -71,14 +71,21 @@ public class Main {
             Thread thread = new Thread(run);
             threads.add(thread);
         }
-        threads.get(0).start();
-        threads.get(1).start();
-        threads.get(2).start();
-        threads.get(3).start();
-        threads.get(0).join();
-        threads.get(1).join();
-        threads.get(2).join();
-        threads.get(3).join();
+        if(numeroThreads == 2){
+            threads.get(0).start();
+            threads.get(1).start();
+            threads.get(0).join();
+            threads.get(1).join();
+        }else if (numeroThreads == 4){
+            threads.get(0).start();
+            threads.get(1).start();
+            threads.get(2).start();
+            threads.get(3).start();
+            threads.get(0).join();
+            threads.get(1).join();
+            threads.get(2).join();
+            threads.get(3).join();
+        }
         System.out.println("Concluido processamento ponto a ponto ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
         List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
