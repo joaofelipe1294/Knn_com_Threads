@@ -15,6 +15,7 @@ import java.util.List;
 import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
 import util.ComparadoraDePontos;
+import util.GeradoraDeResultados;
 import util.MontadoraDeLista;
 
 /**
@@ -23,11 +24,13 @@ import util.MontadoraDeLista;
  */
 public class Main {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-        final int NUMERO_THREADS = 4;
-        int kMaisProximos = 5;
-        LeArquivoThread runnableTrain = new LeArquivoThread("150k/CCtrain");
+        String arquivoTreino = args[0];
+        String arquivoTeste = args[1];
+        int kMaisProximos = Integer.valueOf(args[2]);
+        final int NUMERO_THREADS = Integer.valueOf(args[4]);
+        LeArquivoThread runnableTrain = new LeArquivoThread(arquivoTreino);
         Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoThread runnableTest = new LeArquivoThread("150k/test600");
+        LeArquivoThread runnableTest = new LeArquivoThread(arquivoTeste);
         Thread threadTest = new Thread(runnableTest);
         System.out.println("Comecou a ler os arquivos");
         long tempo = new Date().getTime();
@@ -63,17 +66,7 @@ public class Main {
         List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
-        PrintStream arquivo = new PrintStream("150k/respostas.txt");
-        arquivo.println("+---------------------+");
-        arquivo.println("|   KNN    |  TESTE   |");
-        arquivo.println("+---------------------+");
-        for(int contador = 0 ; contador < listaTest.size() ; contador++){
-            int knn = resultados.get(contador).getLabel();
-            double[] linhaTeste = listaTest.get(contador);
-            int teste = (int) linhaTeste[linhaTeste.length - 1];
-            arquivo.println("|     " + knn + "    |    " + teste + "     |");
-        }
-        arquivo.println("+---------------------+");
+        new GeradoraDeResultados(resultados, listaTest).gerarArquivo();
         System.out.println("Concluido !!!");
     }
 }
