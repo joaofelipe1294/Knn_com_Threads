@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import util.SeparadoraDeListas;
 import java.util.List;
+import java.util.Scanner;
 import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
 import util.ComparadoraDePontos;
@@ -24,10 +25,27 @@ import util.MontadoraDeLista;
  */
 public class Main {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-        String arquivoTreino = args[0];
-        String arquivoTeste = args[1];
-        int kMaisProximos = Integer.valueOf(args[2]);
-        final int NUMERO_THREADS = Integer.valueOf(args[4]);
+        String arquivoTreino;
+        String arquivoTeste;
+        int kMaisProximos;
+        int numeroThreads;
+        if(args.length > 0){
+            arquivoTreino = args[0];
+            arquivoTeste = args[1];
+            kMaisProximos = Integer.valueOf(args[2]);
+            numeroThreads = Integer.valueOf(args[4]);
+        }else{
+            Scanner scan = new Scanner(System.in);
+            System.out.print("Arquivo de treino : ");
+            arquivoTreino = scan.next();
+            System.out.print("Arquivo de teste : ");
+            arquivoTeste = scan.next();
+            System.out.print("K mais proximos : ");
+            kMaisProximos = scan.nextInt();
+            System.out.print("Numero de threads : ");
+            numeroThreads = scan.nextInt();
+            scan.close();
+        }
         LeArquivoThread runnableTrain = new LeArquivoThread(arquivoTreino);
         Thread threadTrain = new Thread(runnableTrain);
         LeArquivoThread runnableTest = new LeArquivoThread(arquivoTeste);
@@ -42,12 +60,12 @@ public class Main {
         tempo = new Date().getTime();
         List<double[]> listaTrain = runnableTrain.getLista();
         List<double[]> listaTest = runnableTest.getLista();
-        List<List<double[]>> listas = new SeparadoraDeListas(NUMERO_THREADS, listaTest).quebra();
+        List<List<double[]>> listas = new SeparadoraDeListas(numeroThreads, listaTest).quebra();
         System.out.println("LISTA QUEBRADA ! tempo gasto :  " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
         List<ProcessaPontosThread> runnables = new ArrayList<>();
         List<Thread> threads = new ArrayList<>();
-        for(int contador = 0 ; contador < NUMERO_THREADS ; contador++){
+        for(int contador = 0 ; contador < numeroThreads ; contador++){
             ProcessaPontosThread run = new ProcessaPontosThread(listaTrain, listas.get(contador), kMaisProximos);
             runnables.add(run);
             Thread thread = new Thread(run);
