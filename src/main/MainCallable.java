@@ -15,11 +15,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import threads.LeArquivoCallable;
-import threads.ProcessaPontosRunnable;
+import threads.ProcessaPontosCallable;
 import util.ComparadoraDePontos;
 import util.GeradoraDeResultados;
 import util.GeradoraMatrizDeDecisao;
-import util.MontadoraDeLista;
+import util.MontadoraDeListaCallable;
 import util.SeparadoraDeListas;
 
 /**
@@ -58,37 +58,20 @@ public class MainCallable {
         Future<List<double[]>> futuroTreino = executorService.submit(callableTreino);
         List<double[]> listaTrain = futuroTreino.get();
         List<double[]> listaTest = futuroTeste.get();
+        System.out.println("TAMANHO LISTA TEST : " + listaTest.size());
         System.out.println("ARQUIVOS LIDOS ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
         List<List<double[]>> listas = new SeparadoraDeListas(numeroThreads, listaTest).quebra();
-        System.out.println("LISTA QUEBRADA ! tempo gasto :  " + (new Date().getTime() - tempo));
+        System.out.println("LISTA QUEBRADA  ! tempo gasto :  " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
-        List<ProcessaPontosRunnable> runnables = new ArrayList<>();
-        List<Thread> threads = new ArrayList<>();
+        List<Future<List<List<Ponto>>>> futuros = new ArrayList<>();
         for(int contador = 0 ; contador < numeroThreads ; contador++){
-            ProcessaPontosRunnable run = new ProcessaPontosRunnable(listaTrain, listas.get(contador), kMaisProximos);
-            runnables.add(run);
-            Thread thread = new Thread(run);
-            threads.add(thread);
-        }
-        if(numeroThreads == 2){
-            threads.get(0).start();
-            threads.get(1).start();
-            threads.get(0).join();
-            threads.get(1).join();
-        }else if (numeroThreads == 4){
-            threads.get(0).start();
-            threads.get(1).start();
-            threads.get(2).start();
-            threads.get(3).start();
-            threads.get(0).join();
-            threads.get(1).join();
-            threads.get(2).join();
-            threads.get(3).join();
+            ProcessaPontosCallable callable = new ProcessaPontosCallable(listas.get(contador), listaTrain, kMaisProximos);
+            futuros.add(executorService.submit(callable));
         }
         System.out.println("Concluido processamento ponto a ponto ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
-        List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
+        List<List<Ponto>> pontosMaisProximos = new MontadoraDeListaCallable(futuros).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         new GeradoraDeResultados(resultados, listaTest).gerarArquivo();

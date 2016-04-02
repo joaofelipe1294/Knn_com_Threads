@@ -67,7 +67,6 @@ public class GeradoraMatrizDeDecisao {
             }
         }
         gerarArquivo();
-        
     }
     
     private void gerarArquivo(){

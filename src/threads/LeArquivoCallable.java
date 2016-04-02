@@ -24,7 +24,6 @@ public class LeArquivoCallable implements Callable<List<double[]>>{
     
     @Override
     public List<double[]> call() throws Exception {
-        System.out.println("Comecou a executar " + Thread.currentThread().getId());
         List<double[]> lista = new ArrayList<>();
         try {
             Scanner scan = new Scanner(new FileReader(this.nomeArquivo));
@@ -43,7 +42,6 @@ public class LeArquivoCallable implements Callable<List<double[]>>{
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("Concluida thread " + Thread.currentThread().getId());
         return lista;
     }
     

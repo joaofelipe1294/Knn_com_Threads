@@ -17,7 +17,7 @@ import threads.ProcessaPontosRunnable;
 import util.ComparadoraDePontos;
 import util.GeradoraDeResultados;
 import util.GeradoraMatrizDeDecisao;
-import util.MontadoraDeLista;
+import util.MontadoraDeListaRunnable;
 
 /**
  *
@@ -88,7 +88,7 @@ public class Main {
         }
         System.out.println("Concluido processamento ponto a ponto ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
-        List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
+        List<List<Ponto>> pontosMaisProximos = new MontadoraDeListaRunnable(runnables).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         new GeradoraDeResultados(resultados, listaTest).gerarArquivo();

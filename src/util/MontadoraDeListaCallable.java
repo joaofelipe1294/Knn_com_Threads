@@ -8,29 +8,28 @@ package util;
 import beans.Ponto;
 import java.util.ArrayList;
 import java.util.List;
-import threads.ProcessaPontosRunnable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  *
  * @author joaofelipe
  */
-public class MontadoraDeLista {
-    private List<ProcessaPontosRunnable> runnables;
+public class MontadoraDeListaCallable {
+    private List<Future<List<List<Ponto>>>> futures;
     private List<List<Ponto>> pontosMaisProximos;
 
-    public MontadoraDeLista(List<ProcessaPontosRunnable> runnables) {
-        this.runnables = runnables;
+    public MontadoraDeListaCallable(List<Future<List<List<Ponto>>>> futures) {
+        this.futures = futures;
         this.pontosMaisProximos = new ArrayList<>();
     }
-    
-    public List<List<Ponto>> monta(){
-         new ArrayList<>();
-        for(ProcessaPontosRunnable run : runnables){
-           for(List<Ponto> ponto : run.getResultados()){
+
+    public List<List<Ponto>> monta() throws InterruptedException, ExecutionException{
+        for(Future<List<List<Ponto>>> futuro : futures){
+            for(List<Ponto> ponto : futuro.get()){
                 pontosMaisProximos.add(ponto);
             }
         }
         return pontosMaisProximos;
     }
-    
 }
