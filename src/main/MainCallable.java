@@ -6,25 +6,28 @@
 package main;
 
 import beans.Ponto;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
-import util.SeparadoraDeListas;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import threads.LeArquivoCallable;
 import threads.LeArquivoRunnable;
 import threads.ProcessaPontosRunnable;
 import util.ComparadoraDePontos;
 import util.GeradoraDeResultados;
 import util.MontadoraDeLista;
+import util.SeparadoraDeListas;
 
 /**
  *
- * @author joaolopes
+ * @author joaofelipe
  */
-public class Main {
-    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
+public class MainCallable {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
         String arquivoTreino;
         String arquivoTeste;
         int kMaisProximos;
@@ -46,7 +49,18 @@ public class Main {
             numeroThreads = scan.nextInt();
             scan.close();
         }
-        LeArquivoRunnable runnableTrain = new LeArquivoRunnable(arquivoTreino);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        LeArquivoCallable callableTreino = new LeArquivoCallable(arquivoTreino);
+        LeArquivoCallable callableTeste = new LeArquivoCallable(arquivoTeste);
+        System.out.println("Comecou a ler os arquivos");
+        long tempo = new Date().getTime();
+        Future<List<double[]>> futuroTeste = executorService.submit(callableTeste);
+        Future<List<double[]>> futuroTreino = executorService.submit(callableTreino);
+        List<double[]> listaTrain = futuroTreino.get();
+        List<double[]> listaTest = futuroTeste.get();
+        System.out.println("ARQUIVOS LIDOS ! tempo gasto : " + (new Date().getTime() - tempo));
+        tempo = new Date().getTime();
+        /*LeArquivoRunnable runnableTrain = new LeArquivoRunnable(arquivoTreino);
         Thread threadTrain = new Thread(runnableTrain);
         LeArquivoRunnable runnableTest = new LeArquivoRunnable(arquivoTeste);
         Thread threadTest = new Thread(runnableTest);
@@ -59,7 +73,7 @@ public class Main {
         System.out.println("ARQUIVOS LIDOS ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
         List<double[]> listaTrain = runnableTrain.getLista();
-        List<double[]> listaTest = runnableTest.getLista();
+        List<double[]> listaTest = runnableTest.getLista();*/
         List<List<double[]>> listas = new SeparadoraDeListas(numeroThreads, listaTest).quebra();
         System.out.println("LISTA QUEBRADA ! tempo gasto :  " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();

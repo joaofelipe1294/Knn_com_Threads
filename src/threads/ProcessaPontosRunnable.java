@@ -15,13 +15,13 @@ import java.util.List;
  *
  * @author joaolopes
  */
-public class ProcessaPontosThread implements Runnable{
+public class ProcessaPontosRunnable implements Runnable{
     private List<double[]> listaTrain;
     private List<double[]> listaTest;
     private int kMaisProximos;
     private List<List<Ponto>> resultados;
     
-    public ProcessaPontosThread(List<double[]> listaTrain, List<double[]> listaTest , int kMaisProximos) {
+    public ProcessaPontosRunnable(List<double[]> listaTrain, List<double[]> listaTest , int kMaisProximos) {
         this.listaTrain = listaTrain;
         this.listaTest = listaTest;
         this.kMaisProximos = kMaisProximos;
