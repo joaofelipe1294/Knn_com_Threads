@@ -21,7 +21,8 @@ public class Calculadora {
     public double calcDistancia(){
         double distancia = 0;
         for(int contador = 0; contador < linhaTest.length - 1 ; contador++ ){
-            distancia += Math.abs(linhaTrain[contador] - linhaTest[contador]);
+            //distancia += Math.abs(linhaTrain[contador] - linhaTest[contador]);
+            distancia += Math.pow((linhaTrain[contador] - linhaTest[contador]), 2);
         }
         return distancia;
     }

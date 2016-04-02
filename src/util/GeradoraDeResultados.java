@@ -42,7 +42,6 @@ public class GeradoraDeResultados {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GeradoraDeResultados.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
 }

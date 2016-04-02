@@ -7,7 +7,6 @@ package main;
 
 import beans.Ponto;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import util.SeparadoraDeListas;
@@ -17,6 +16,7 @@ import threads.LeArquivoThread;
 import threads.ProcessaPontosThread;
 import util.ComparadoraDePontos;
 import util.GeradoraDeResultados;
+import util.GeradoraMatrizDeDecisao;
 import util.MontadoraDeLista;
 
 /**
@@ -92,6 +92,7 @@ public class Main {
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         new GeradoraDeResultados(resultados, listaTest).gerarArquivo();
+        new GeradoraMatrizDeDecisao(listaTest, resultados).gerarMatriz();
         System.out.println("Concluido !!!");
     }
 }
