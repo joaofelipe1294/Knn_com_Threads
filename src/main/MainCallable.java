@@ -15,10 +15,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import threads.LeArquivoCallable;
-import threads.LeArquivoRunnable;
 import threads.ProcessaPontosRunnable;
 import util.ComparadoraDePontos;
 import util.GeradoraDeResultados;
+import util.GeradoraMatrizDeDecisao;
 import util.MontadoraDeLista;
 import util.SeparadoraDeListas;
 
@@ -60,20 +60,6 @@ public class MainCallable {
         List<double[]> listaTest = futuroTeste.get();
         System.out.println("ARQUIVOS LIDOS ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
-        /*LeArquivoRunnable runnableTrain = new LeArquivoRunnable(arquivoTreino);
-        Thread threadTrain = new Thread(runnableTrain);
-        LeArquivoRunnable runnableTest = new LeArquivoRunnable(arquivoTeste);
-        Thread threadTest = new Thread(runnableTest);
-        System.out.println("Comecou a ler os arquivos");
-        long tempo = new Date().getTime();
-        threadTrain.start();
-        threadTest.start();
-        threadTrain.join();
-        threadTest.join();        
-        System.out.println("ARQUIVOS LIDOS ! tempo gasto : " + (new Date().getTime() - tempo));
-        tempo = new Date().getTime();
-        List<double[]> listaTrain = runnableTrain.getLista();
-        List<double[]> listaTest = runnableTest.getLista();*/
         List<List<double[]>> listas = new SeparadoraDeListas(numeroThreads, listaTest).quebra();
         System.out.println("LISTA QUEBRADA ! tempo gasto :  " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
@@ -85,20 +71,28 @@ public class MainCallable {
             Thread thread = new Thread(run);
             threads.add(thread);
         }
-        threads.get(0).start();
-        threads.get(1).start();
-        threads.get(2).start();
-        threads.get(3).start();
-        threads.get(0).join();
-        threads.get(1).join();
-        threads.get(2).join();
-        threads.get(3).join();
+        if(numeroThreads == 2){
+            threads.get(0).start();
+            threads.get(1).start();
+            threads.get(0).join();
+            threads.get(1).join();
+        }else if (numeroThreads == 4){
+            threads.get(0).start();
+            threads.get(1).start();
+            threads.get(2).start();
+            threads.get(3).start();
+            threads.get(0).join();
+            threads.get(1).join();
+            threads.get(2).join();
+            threads.get(3).join();
+        }
         System.out.println("Concluido processamento ponto a ponto ! tempo gasto : " + (new Date().getTime() - tempo));
         tempo = new Date().getTime();
         List<List<Ponto>> pontosMaisProximos = new MontadoraDeLista(runnables).monta();
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         new GeradoraDeResultados(resultados, listaTest).gerarArquivo();
+        new GeradoraMatrizDeDecisao(listaTest, resultados).gerarMatriz();
         executorService.shutdown();
         System.out.println("Concluido !!!");
     }
