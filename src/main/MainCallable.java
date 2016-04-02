@@ -99,6 +99,7 @@ public class MainCallable {
         System.out.println("Remontada lita com os resultados ! tempo gasto : " + (new Date().getTime() - tempo));
         List<Ponto> resultados = new ComparadoraDePontos(pontosMaisProximos).compara();
         new GeradoraDeResultados(resultados, listaTest).gerarArquivo();
+        executorService.shutdown();
         System.out.println("Concluido !!!");
     }
 }
