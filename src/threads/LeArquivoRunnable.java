@@ -14,11 +14,11 @@ import java.util.Scanner;
  *
  * @author joaolopes
  */
-public class LeArquivoThread implements Runnable{
+public class LeArquivoRunnable implements Runnable{
     private String nomeArquivo;
     private List<double[]> lista;    
     
-    public LeArquivoThread(String nomeArquivo) {
+    public LeArquivoRunnable(String nomeArquivo) {
         this.nomeArquivo = nomeArquivo;
         this.lista = new ArrayList<>();
     }

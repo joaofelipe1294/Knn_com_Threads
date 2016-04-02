@@ -8,24 +8,24 @@ package util;
 import beans.Ponto;
 import java.util.ArrayList;
 import java.util.List;
-import threads.ProcessaPontosThread;
+import threads.ProcessaPontosRunnable;
 
 /**
  *
  * @author joaofelipe
  */
 public class MontadoraDeLista {
-    private List<ProcessaPontosThread> runnables;
+    private List<ProcessaPontosRunnable> runnables;
     private List<List<Ponto>> pontosMaisProximos;
 
-    public MontadoraDeLista(List<ProcessaPontosThread> runnables) {
+    public MontadoraDeLista(List<ProcessaPontosRunnable> runnables) {
         this.runnables = runnables;
         this.pontosMaisProximos = new ArrayList<>();
     }
     
     public List<List<Ponto>> monta(){
          new ArrayList<>();
-        for(ProcessaPontosThread run : runnables){
+        for(ProcessaPontosRunnable run : runnables){
            for(List<Ponto> ponto : run.getResultados()){
                 pontosMaisProximos.add(ponto);
             }
